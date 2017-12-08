@@ -30,6 +30,7 @@ class GridItem {
     GridItem() { position_ = -1; }
     GridItem(int position) { position_ = position; }
     int position() { return position_; }
+	virtual ~GridItem() {};		//A non-virtual destructor will create undefined behavior
 
   protected:
     int position_;
@@ -80,8 +81,7 @@ class Grid : public GridItem {
   public:
     Grid() : GridItem() {}
     Grid(int position) : GridItem(position) {}
-    Grid(int position, vector<GridItem> items) {
-        Grid(position);
+    Grid(int position, vector<GridItem*> items) : GridItem(position) {
         if (items.size() == 9) {
             items_ = items;
         } else {
@@ -90,13 +90,18 @@ class Grid : public GridItem {
                 + items.size());
         }
     }
-    GridItem getItemAtPosition(int position) { return items_[position]; }
-    void setItemAtPosition(int position, GridItem item) {
+    GridItem* getItemAtPosition(int position) { return items_[position]; }
+    void setItemAtPosition(int position, GridItem* item) {
         items_[position] = item;
     }
+	virtual ~Grid() {
+		/*for (size_t index = items_.size() - 1; index >= 0; --index) {
+			delete items_[index];
+		}*/
+	}
 
   protected:
-    vector<GridItem> items_;
+    vector<GridItem*> items_;	//In C++, these must be pointers, or else data will be sliced down to GridItem
 };
 
 /*
@@ -154,8 +159,7 @@ class Button : public GridItem {
     enum State { None, Red, Blue, Tie };
     Button() : GridItem() {}
     Button(int position) : GridItem(position) {}
-    Button(int position, bool locked, State state) {
-        Button(position);
+    Button(int position, bool locked, State state) : GridItem(position) {
         locked_ = locked;
         state_ = state;
     }
