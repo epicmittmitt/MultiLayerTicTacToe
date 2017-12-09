@@ -4,7 +4,7 @@
 wxIMPLEMENT_APP(TTTproject);
 bool TTTproject::OnInit() { TTTFrame *frame = new TTTFrame();    frame->Show(true);    return true; }
 TTTFrame::TTTFrame()
-	: wxFrame(NULL, wxID_ANY, "Fractalized Tic Tac Toe: Level Three"), Grid(), grid(nullptr) {
+	: wxFrame(NULL, wxID_ANY, "Fractalized Tic Tac Toe: Level Three"), Grid(), grid(nullptr), player(Button::State::Red) {
 
 	wxMenu *menuHelp = new wxMenu;
 	menuHelp->Append(wxID_ABOUT);
@@ -54,6 +54,17 @@ void TTTFrame::OnExit(wxCommandEvent& event) {
 void TTTFrame::OnAbout(wxCommandEvent& event) {
 	wxMessageBox("This is a wxWidgets' Hello world sample",
 		"About Hello World", wxOK | wxICON_INFORMATION);
+}
+
+Button::State TTTFrame::getAndSetPlayer() {
+	Button::State old = player;
+	if (player == Button::State::Red) {
+		player = Button::State::Blue;
+	}
+	else {
+		player = Button::State::Red;
+	}
+	return old;
 }
 
 /*void TTTFrame::OnClick(wxCommandEvent& event) {
