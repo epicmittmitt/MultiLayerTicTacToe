@@ -1,27 +1,10 @@
 #include <wx/wxprec.h>
 #include "skull.h"
 
-class TTTproject : public wxApp {
-public:
-	virtual bool OnInit();
-};
-
-class TTTFrame : public wxFrame, public Grid {
-public:
-	TTTFrame();
-	~TTTFrame();
-private:
-	void OnExit(wxCommandEvent& event);
-	void OnAbout(wxCommandEvent& event);
-	//void OnClick(wxCommandEvent& event);
-
-	wxGridSizer* grid;
-};
-
 wxIMPLEMENT_APP(TTTproject);
 bool TTTproject::OnInit() { TTTFrame *frame = new TTTFrame();    frame->Show(true);    return true; }
 TTTFrame::TTTFrame()
-	: wxFrame(NULL, wxID_ANY, "Experiment"), Grid(), grid(nullptr) {
+	: wxFrame(NULL, wxID_ANY, "Fractalized Tic Tac Toe: Level Three"), Grid(), grid(nullptr) {
 
 	wxMenu *menuHelp = new wxMenu;
 	menuHelp->Append(wxID_ABOUT);
@@ -35,7 +18,7 @@ TTTFrame::TTTFrame()
 	grid = new wxGridSizer(3, 3, 8, 8);
 
 	for (int index = 0; index < 9; ++index) {
-		TTTBoard* element = new TTTBoard(index, this, false);
+		TTTBoard* element = new TTTBoard(index, this);
 		items_.push_back(element);
 		//setItemAtPosition(index, element);
 		grid->Add(element, 0, wxEXPAND);
@@ -74,5 +57,8 @@ void TTTFrame::OnAbout(wxCommandEvent& event) {
 }
 
 /*void TTTFrame::OnClick(wxCommandEvent& event) {
+	wxObject* obj = event.GetEventObject();
+	TTTButton* active = (TTTButton*)obj;
+	active->SetBackgroundColour(*wxRED);
 	//button1->SetBackgroundColour(*wxBLACK);
 }*/
