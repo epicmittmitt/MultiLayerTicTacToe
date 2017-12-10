@@ -34,7 +34,7 @@ enum ids{
 
 class TTTBoard : public Grid, public wxPanel {
 public:
-	TTTBoard(int pos, int board, wxWindow* frame) : Grid(pos, 1), wxPanel(frame, ID_Panel), grid(nullptr) {
+	TTTBoard(int pos, int board, wxWindow* frame) : Grid(pos, (TTTBoard*) frame), wxPanel(frame, ID_Panel), grid(nullptr) {
 		grid = new wxGridSizer(3, 3, 4, 4);
 		for (int index = 0; index < 9; ++index) {
 			string code = to_string(board) + to_string(pos) + to_string(index);
@@ -48,7 +48,7 @@ public:
 		SetSizer(grid);
 	}
 
-	TTTBoard(int pos, wxWindow* frame) : Grid(pos, 2), wxPanel(frame, ID_Panel), grid(nullptr) {
+	TTTBoard(int pos, wxWindow* frame) : Grid(pos, (TTTBoard*) frame), wxPanel(frame, ID_Panel), grid(nullptr) {
 		grid = new wxGridSizer(3, 3, 4, 4);
 		for (int index = 0; index < 9; ++index) {
 			TTTBoard* board = new TTTBoard(index, pos, this);
@@ -64,7 +64,8 @@ private:
 };
 
 
-TTTButton::TTTButton(int position, int ID, wxPanel* panel) : Button(position, false, Button::State::None), wxButton(panel, ID, wxEmptyString) {
+TTTButton::TTTButton(int position, int ID, wxPanel* panel)
+	: Button(position, false, Button::State::None, (TTTBoard*) panel), wxButton(panel, ID, wxEmptyString) {
 	Bind(wxEVT_BUTTON, &TTTButton::OnClick, this, ID);
 };
 
