@@ -67,9 +67,28 @@ Button::State TTTFrame::getAndSetPlayer() {
 	return old;
 }
 
-/*void TTTFrame::OnClick(wxCommandEvent& event) {
-	wxObject* obj = event.GetEventObject();
-	TTTButton* active = (TTTButton*)obj;
-	active->SetBackgroundColour(*wxRED);
+void TTTButton::OnClick(wxCommandEvent& event) {
+	//Code only usable with TTTFrame; I'm mostly trying to create generic code, but a user would need to modify this
+	if (!locked_ && state_ == Button::State::None) {
+		wxWindow* window = GetGrandParent()->GetParent();
+		TTTFrame* game = (TTTFrame*)window;
+		Button::State player = game->getAndSetPlayer();
+		state_ = player;
+		if (player == Button::State::Red) {
+			SetBackgroundColour(*wxRED);
+		}
+		else {
+			SetBackgroundColour(*wxBLUE);
+		}
+		//wxWindow* parent = GetParent();
+		//TTTBoard* active = (TTTBoard*)parent;
+		//active->OnClick
+	}
+};
+
+void TTTFrame::OnClick(/*wxCommandEvent& event*/) {
+	//wxObject* obj = event.GetEventObject();
+	//TTTButton* active = (TTTButton*)obj;
+	//active->SetBackgroundColour(*wxRED);
 	//button1->SetBackgroundColour(*wxBLACK);
-}*/
+}
