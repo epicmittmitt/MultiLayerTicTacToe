@@ -28,7 +28,7 @@ using namespace std;
 class GridItem {
   public:
     enum State { None, Red, Blue, Tie };
-    GridItem() { position_ = -1; layer_ = 3} // The three is the top layer grid item
+    GridItem() { position_ = -1; layer_ = 3; } // The three is the top layer grid item
     GridItem(int position, int layer) { position_ = position; layer_ = layer;}
     int position() { return position_; }
 	  virtual ~GridItem() {};		//A non-virtual destructor will create undefined behavior
