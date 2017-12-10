@@ -37,18 +37,16 @@ class Button;
 class GridItem {
   public:
     enum State { None, Red, Blue, Tie };
-    GridItem() : state_(GridItem::State::None) { position_ = -1; layer_ = 3; } // The three is the top layer grid item
-    GridItem(int position, int layer) : state_(GridItem::State::None){ position_ = position; layer_ = layer;}
+    GridItem() : state_(GridItem::State::None) { position_ = -1; } // The three is the top layer grid item
+    GridItem(int position) : state_(GridItem::State::None){ position_ = position; }
     int position() { return position_; }
 	  virtual ~GridItem() {};		//A non-virtual destructor will create undefined behavior
     State getState() { return state_; }
     void setState(State state) { state_ = state; }
-    int getLayer() { return layer_; };
-    virtual Grid* getParent();
+    virtual Grid* getParent() { return nullptr; }
 
   protected:
     int position_;
-    int layer_;
     State state_;
 };
 
@@ -96,10 +94,10 @@ class GridItem {
 class Grid : public GridItem {
   public:
     Grid() : GridItem(), parent(nullptr) {}
-    Grid(int position, int layer) : GridItem(position, layer), parent(nullptr) {}
-    Grid(int position, Grid* caller) : GridItem(position, 0), parent(caller) {}
-    Grid(int position, int layer, vector<GridItem*> items) : parent(nullptr) {
-        Grid(position, layer);
+    Grid(int position) : GridItem(position), parent(nullptr) {}
+    Grid(int position, Grid* caller) : GridItem(position), parent(caller) {}
+    Grid(int position, vector<GridItem*> items) : parent(nullptr) {
+        Grid(position);
         if (items.size() == 9) {
             items_ = items;
         } else {
@@ -177,8 +175,8 @@ class Grid : public GridItem {
 class Button : public GridItem {
   public:
     Button() : GridItem(), locked_(false), parent(nullptr) {}
-    Button(int position, Grid* caller) : GridItem(position, 0), locked_(false), parent(caller) {} // buttons should always be in layer 0
-    Button(int position, bool locked, State state, Grid* caller) : GridItem(position, 0), parent(caller) {
+    Button(int position, Grid* caller) : GridItem(position), locked_(false), parent(caller) {} // buttons should always be in layer 0
+    Button(int position, bool locked, State state, Grid* caller) : GridItem(position), parent(caller) {
         // Button(position);
         locked_ = locked;
         state_ = state;
