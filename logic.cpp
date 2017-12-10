@@ -2,7 +2,7 @@
  * logic.cpp
  * This should belong in a main class
  *
- *      Author: connorgeard
+ *      Author: connorbeard
  */
 
 #include<iostream>
