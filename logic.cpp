@@ -79,4 +79,12 @@ void checkForWinner(GridItem g, GridItem::State s) {
 			}
 		}
 	}
+
+	// tie check
+	for (int i = 0; i < 9; i++) {
+		if (layers_.at(g.getLayer() + 1).getItemAtPosition(i).getState() == GridItem::State::None)
+			break;
+		if (i == 8)
+			g.setState(GridItem::State::Tie);
+	}
 }
