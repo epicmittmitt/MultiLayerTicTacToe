@@ -31,6 +31,7 @@ class GridItem {
     GridItem() { position_ = -1; layer_ = 3} // The three is the top layer grid item
     GridItem(int position, int layer) { position_ = position; layer_ = layer;}
     int position() { return position_; }
+	  virtual ~GridItem() {};		//A non-virtual destructor will create undefined behavior
     State getState() { return state_; }
     void setState(State state) { state_ = state; }
     int getLayer() { return layer_; };
@@ -86,7 +87,7 @@ class Grid : public GridItem {
   public:
     Grid() : GridItem() {}
     Grid(int position, int layer) : GridItem(position, layer) {}
-    Grid(int position, int layer, vector<GridItem> items) {
+    Grid(int position, int layer, vector<GridItem*> items) {
         Grid(position, layer);
         if (items.size() == 9) {
             items_ = items;
@@ -96,15 +97,18 @@ class Grid : public GridItem {
                 + items.size());
         }
     }
-    GridItem getItemAtPosition(int position) { return items_[position]; }
-    void setItemAtPosition(int position, GridItem item) {
+    GridItem* getItemAtPosition(int position) { return items_[position]; }
+    void setItemAtPosition(int position, GridItem* item) {
         items_[position] = item;
     }
-    //vector<GridItem> & getItems() {
-    	//return items_;
-    //}
+	  virtual ~Grid() {
+		/*for (size_t index = items_.size() - 1; index >= 0; --index) {
+			delete items_[index];
+		}*/
+	}
+
   protected:
-    vector<GridItem> items_; //if issue, you need vector of ptrs
+    vector<GridItem*> items_;	//In C++, these must be pointers, or else data will be sliced down to GridItem
 };
 
 /*
