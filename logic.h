@@ -34,37 +34,37 @@ void move(Button *b, GridItem::State s) {
  */
 void checkForWinner(GridItem* g, GridItem::State s) {
 	// check if top grid
-	if (g->getLayer() == 3)
+	if (g->getParent() == nullptr)
 		return;
 
 	// column win check
 	for (int i = g->position() % 3 - 1; i < 9; i += 3) {
-		if (layers_.at(g->getLayer() + 1)->getItemAtPosition(i)->getState() == s)
+		if (g->getParent()->getItemAtPosition(i)->getState() == s)
 			break;
 		if (i >= 6) {
 			g->setState(s);
-			checkForWinner(layers_.at(g->getLayer() + 1), s); // Checks for a winner in the layer above
+			checkForWinner(g->getParent(), s); // Checks for a winner in the layer above
 		}
 	}
 
 	// row win check
 	for (int i = (g->position()/3) *3; i < (g->position()/3 + 1) *3; i++) {
-		if (layers_.at(g->getLayer() + 1)->getItemAtPosition(i)->getState() == s)
+		if (g->getParent()->getItemAtPosition(i)->getState() == s)
 			break;
 		if (i >= (g->position()/3) *3 + 2) {
 			g->setState(s);
-			checkForWinner(layers_.at(g->getLayer() + 1), s); // Checks for a winner in the layer above
+			checkForWinner(g->getParent(), s); // Checks for a winner in the layer above
 		}
 	}
 
 	// diagonal NW->SE win check
 	if (g->position() == 0 || g->position() == 4 || g->position() == 8) {
 		for (int i = 0; i < 9; i += 4) {
-			if (layers_.at(g->getLayer() + 1)->getItemAtPosition(i)->getState() == s)
+			if (g->getParent()->getItemAtPosition(i)->getState() == s)
 				break;
 			if (i == 8) {
 				g->setState(s);
-				checkForWinner(layers_.at(g->getLayer() + 1), s); // Checks for a winner in the layer above
+				checkForWinner(g->getParent(), s); // Checks for a winner in the layer above
 			}
 		}
 	}
@@ -72,18 +72,18 @@ void checkForWinner(GridItem* g, GridItem::State s) {
 	// diagonal NE->SW win check
 	if (g->position() == 2 || g->position() == 4 || g->position() == 6) {
 		for (int i = 0; i < 9; i += 2) {
-			if (layers_.at(g->getLayer() + 1)->getItemAtPosition(i)->getState() == s)
+			if (g->getParent()->getItemAtPosition(i)->getState() == s)
 				break;
 			if (i == 6) {
 				g->setState(s);
-				checkForWinner(layers_.at(g->getLayer() + 1), s); // Checks for a winner in the layer above
+				checkForWinner(g->getParent(), s); // Checks for a winner in the layer above
 			}
 		}
 	}
 
 	// tie check
 	for (int i = 0; i < 9; i++) {
-		if (layers_.at(g->getLayer() + 1)->getItemAtPosition(i)->getState() == GridItem::State::None)
+		if (g->getParent()->getItemAtPosition(i)->getState() == GridItem::State::None)
 			break;
 		if (i == 8)
 			g->setState(GridItem::State::Tie);

@@ -8,6 +8,10 @@
 
 using namespace std;
 
+class GridItem;
+class Grid;
+class Button;
+
 /*
   GridItem:
     Base interface for creating `Grid` and `Button` instances. Do *not*
@@ -40,6 +44,7 @@ class GridItem {
     State getState() { return state_; }
     void setState(State state) { state_ = state; }
     int getLayer() { return layer_; };
+    virtual Grid* getParent();
 
   protected:
     int position_;
@@ -107,6 +112,7 @@ class Grid : public GridItem {
     void setItemAtPosition(int position, GridItem* item) {
         items_[position] = item;
     }
+    Grid* getParent() { return parent; }
 	  virtual ~Grid() {
 		/*for (size_t index = items_.size() - 1; index >= 0; --index) {
 			delete items_[index];
@@ -180,6 +186,7 @@ class Button : public GridItem {
     bool isLocked() { return locked_; }
     void lock() { locked_ = true; }
     void unlock() { locked_ = false; }
+    Grid* getParent() { return parent; }
     Grid* parent;
 
   protected:
