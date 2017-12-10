@@ -11,18 +11,19 @@ using namespace std;
 
 vector<Grid*> layers_; // This will be populated with Grid Items
 						 // Probably created in some kind of main class where everything starts
+void checkForWinner(GridItem *g, GridItem::State s);
 
 /**
  * @param b Button that was just clicked
  * @param s State needed to set the button to. Or whose turn it is
  */
-void move(Button* b, GridItem::State s) {
-	if (!(b->isLocked()) && b->getState() == GridItem::State::None) {
-		b->setState(s);
-		b->lock();
+void move(Button *b, GridItem::State s) {
+    if (!(b->isLocked()) && b->getState() == GridItem::State::None) {
+        b->setState(s);
+        b->lock();
 
-		checkForWinner(b, s); // idk why there is an error here
-	}
+        checkForWinner(b, s); // idk why there is an error here
+    }
 }
 
 /**

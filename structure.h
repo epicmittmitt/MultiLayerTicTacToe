@@ -165,8 +165,8 @@ class Button : public GridItem {
   public:
     Button() : GridItem() {}
     Button(int position) : GridItem(position, 0) {} // buttons should always be in layer 0
-    Button(int position, bool locked, State state) {
-        Button(position);
+    Button(int position, bool locked, State state) : Button(postion) {
+        // Button(position);
         locked_ = locked;
         state_ = state;
     }
