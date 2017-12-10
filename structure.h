@@ -33,8 +33,8 @@ using namespace std;
 class GridItem {
   public:
     enum State { None, Red, Blue, Tie };
-    GridItem() { position_ = -1; layer_ = 3; } // The three is the top layer grid item
-    GridItem(int position, int layer) { position_ = position; layer_ = layer;}
+    GridItem() : state_(GridItem::State::None) { position_ = -1; layer_ = 3; } // The three is the top layer grid item
+    GridItem(int position, int layer) : state_(GridItem::State::None){ position_ = position; layer_ = layer;}
     int position() { return position_; }
 	  virtual ~GridItem() {};		//A non-virtual destructor will create undefined behavior
     State getState() { return state_; }
@@ -90,9 +90,10 @@ class GridItem {
 */
 class Grid : public GridItem {
   public:
-    Grid() : GridItem() {}
-    Grid(int position, int layer) : GridItem(position, layer) {}
-    Grid(int position, int layer, vector<GridItem*> items) {
+    Grid() : GridItem(), parent(nullptr) {}
+    Grid(int position, int layer) : GridItem(position, layer), parent(nullptr) {}
+    Grid(int position, Grid* caller) : GridItem(position, 0), parent(caller) {}
+    Grid(int position, int layer, vector<GridItem*> items) : parent(nullptr) {
         Grid(position, layer);
         if (items.size() == 9) {
             items_ = items;
@@ -111,6 +112,7 @@ class Grid : public GridItem {
 			delete items_[index];
 		}*/
 	}
+	  Grid* parent;
 
   protected:
     vector<GridItem*> items_;	//In C++, these must be pointers, or else data will be sliced down to GridItem
@@ -168,9 +170,9 @@ class Grid : public GridItem {
 */
 class Button : public GridItem {
   public:
-    Button() : GridItem() {}
-    Button(int position) : GridItem(position, 0) {} // buttons should always be in layer 0
-    Button(int position, bool locked, State state) : GridItem(position, 0) {
+    Button() : GridItem(), locked_(false), parent(nullptr) {}
+    Button(int position, Grid* caller) : GridItem(position, 0), locked_(false), parent(caller) {} // buttons should always be in layer 0
+    Button(int position, bool locked, State state, Grid* caller) : GridItem(position, 0), parent(caller) {
         // Button(position);
         locked_ = locked;
         state_ = state;
@@ -178,6 +180,7 @@ class Button : public GridItem {
     bool isLocked() { return locked_; }
     void lock() { locked_ = true; }
     void unlock() { locked_ = false; }
+    Grid* parent;
 
   protected:
     bool locked_;
