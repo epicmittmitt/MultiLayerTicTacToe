@@ -1,5 +1,10 @@
+#if !defined(__STRUCTURE_H__)
+#define __STRUCTURE_H__
+
 #include <stdexcept>
 #include <vector>
+
+
 
 using namespace std;
 
@@ -177,3 +182,5 @@ class Button : public GridItem {
   protected:
     bool locked_;
 };
+
+#endif

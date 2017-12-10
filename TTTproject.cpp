@@ -1,5 +1,6 @@
 #include <wx/wxprec.h>
 #include "skull.h"
+#include "logic.h"
 
 wxIMPLEMENT_APP(TTTproject);
 bool TTTproject::OnInit() { TTTFrame *frame = new TTTFrame();    frame->Show(true);    return true; }
@@ -73,7 +74,8 @@ void TTTButton::OnClick(wxCommandEvent& event) {
 		wxWindow* window = GetGrandParent()->GetParent();
 		TTTFrame* game = (TTTFrame*)window;
 		Button::State player = game->getAndSetPlayer();
-		state_ = player;
+		move(this, player);
+		//state_ = player;
 		if (player == Button::State::Red) {
 			SetBackgroundColour(*wxRED);
 		}
@@ -84,7 +86,7 @@ void TTTButton::OnClick(wxCommandEvent& event) {
 		//TTTBoard* active = (TTTBoard*)parent;
 		//active->OnClick
 	}
-};
+}
 
 void TTTFrame::OnClick(/*wxCommandEvent& event*/) {
 	//wxObject* obj = event.GetEventObject();
