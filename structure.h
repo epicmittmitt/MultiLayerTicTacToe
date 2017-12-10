@@ -27,12 +27,18 @@ using namespace std;
 */
 class GridItem {
   public:
-    GridItem() { position_ = -1; }
-    GridItem(int position) { position_ = position; }
+    enum State { None, Red, Blue, Tie };
+    GridItem() { position_ = -1; layer_ = 3} // The three is the top layer grid item
+    GridItem(int position, int layer) { position_ = position; layer_ = layer;}
     int position() { return position_; }
+    State getState() { return state_; }
+    void setState(State state) { state_ = state; }
+    int getLayer() { return layer_; };
 
   protected:
     int position_;
+    int layer_;
+    State state_;
 };
 
 /*
@@ -79,9 +85,9 @@ class GridItem {
 class Grid : public GridItem {
   public:
     Grid() : GridItem() {}
-    Grid(int position) : GridItem(position) {}
-    Grid(int position, vector<GridItem> items) {
-        Grid(position);
+    Grid(int position, int layer) : GridItem(position, layer) {}
+    Grid(int position, int layer, vector<GridItem> items) {
+        Grid(position, layer);
         if (items.size() == 9) {
             items_ = items;
         } else {
@@ -94,9 +100,11 @@ class Grid : public GridItem {
     void setItemAtPosition(int position, GridItem item) {
         items_[position] = item;
     }
-
+    //vector<GridItem> & getItems() {
+    	//return items_;
+    //}
   protected:
-    vector<GridItem> items_;
+    vector<GridItem> items_; //if issue, you need vector of ptrs
 };
 
 /*
@@ -151,9 +159,8 @@ class Grid : public GridItem {
 */
 class Button : public GridItem {
   public:
-    enum State { None, Red, Blue, Tie };
     Button() : GridItem() {}
-    Button(int position) : GridItem(position) {}
+    Button(int position) : GridItem(position, 0) {} // buttons should always be in layer 0
     Button(int position, bool locked, State state) {
         Button(position);
         locked_ = locked;
@@ -162,10 +169,7 @@ class Button : public GridItem {
     bool isLocked() { return locked_; }
     void lock() { locked_ = true; }
     void unlock() { locked_ = false; }
-    State getState() { return state_; }
-    void setState(State state) { state_ = state; }
 
   protected:
     bool locked_;
-    State state_;
 };
