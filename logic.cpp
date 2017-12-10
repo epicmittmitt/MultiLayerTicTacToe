@@ -5,21 +5,21 @@
  *      Author: connorbeard
  */
 
-#include<iostream>
+#include <iostream>
 #include "structure.h"
 using namespace std;
 
-vector<GridItem> layers_; // This will be populated with Grid Items
+vector<Grid*> layers_; // This will be populated with Grid Items
 						 // Probably created in some kind of main class where everything starts
 
 /**
  * @param b Button that was just clicked
  * @param s State needed to set the button to. Or whose turn it is
  */
-void move(Button b, GridItem::State s) {
-	if (!(b.isLocked()) && b.getState() == GridItem::State::None) {
-		b.setState(s);
-		b.lock();
+void move(Button* b, GridItem::State s) {
+	if (!(b->isLocked()) && b->getState() == GridItem::State::None) {
+		b->setState(s);
+		b->lock();
 
 		checkForWinner(b, s); // idk why there is an error here
 	}
@@ -31,60 +31,60 @@ void move(Button b, GridItem::State s) {
  * @param s State of the specific grid item. Typically this has just changed causing
  * 			there to be new possibilities for winners.
  */
-void checkForWinner(GridItem g, GridItem::State s) {
+void checkForWinner(GridItem* g, GridItem::State s) {
 	// check if top grid
-	if (g.getLayer() == 3)
+	if (g->getLayer() == 3)
 		return;
 
 	// column win check
-	for (int i = g.position() % 3 - 1; i < 9; i += 3) {
-		if (layers_.at(g.getLayer() + 1).getItemAtPosition(i).getState() == s)
+	for (int i = g->position() % 3 - 1; i < 9; i += 3) {
+		if (layers_.at(g->getLayer() + 1)->getItemAtPosition(i)->getState() == s)
 			break;
 		if (i >= 6) {
-			g.setState(s);
-			checkForWinner(layers_.at(g.getLayer() + 1), s); // Checks for a winner in the layer above
+			g->setState(s);
+			checkForWinner(layers_.at(g->getLayer() + 1), s); // Checks for a winner in the layer above
 		}
 	}
 
 	// row win check
-	for (int i = (g.position()/3) *3; i < (g.position()/3 + 1) *3; i++) {
-		if (layers_.at(g.getLayer() + 1).getItemAtPosition(i).getState() == s)
+	for (int i = (g->position()/3) *3; i < (g->position()/3 + 1) *3; i++) {
+		if (layers_.at(g->getLayer() + 1)->getItemAtPosition(i)->getState() == s)
 			break;
-		if (i >= (g.position()/3) *3 + 2) {
-			g.setState(s);
-			checkForWinner(layers_.at(g.getLayer() + 1), s); // Checks for a winner in the layer above
+		if (i >= (g->position()/3) *3 + 2) {
+			g->setState(s);
+			checkForWinner(layers_.at(g->getLayer() + 1), s); // Checks for a winner in the layer above
 		}
 	}
 
 	// diagonal NW->SE win check
-	if (g.position() == 0 || g.position() == 4 || g.position() == 8) {
+	if (g->position() == 0 || g->position() == 4 || g->position() == 8) {
 		for (int i = 0; i < 9; i += 4) {
-			if (layers_.at(g.getLayer() + 1).getItemAtPosition(i).getState() == s)
+			if (layers_.at(g->getLayer() + 1)->getItemAtPosition(i)->getState() == s)
 				break;
 			if (i == 8) {
-				g.setState(s);
-				checkForWinner(layers_.at(g.getLayer() + 1), s); // Checks for a winner in the layer above
+				g->setState(s);
+				checkForWinner(layers_.at(g->getLayer() + 1), s); // Checks for a winner in the layer above
 			}
 		}
 	}
 
 	// diagonal NE->SW win check
-	if (g.position() == 2 || g.position() == 4 || g.position() == 6) {
+	if (g->position() == 2 || g->position() == 4 || g->position() == 6) {
 		for (int i = 0; i < 9; i += 2) {
-			if (layers_.at(g.getLayer() + 1).getItemAtPosition(i).getState() == s)
+			if (layers_.at(g->getLayer() + 1)->getItemAtPosition(i)->getState() == s)
 				break;
 			if (i == 6) {
-				g.setState(s);
-				checkForWinner(layers_.at(g.getLayer() + 1), s); // Checks for a winner in the layer above
+				g->setState(s);
+				checkForWinner(layers_.at(g->getLayer() + 1), s); // Checks for a winner in the layer above
 			}
 		}
 	}
 
 	// tie check
 	for (int i = 0; i < 9; i++) {
-		if (layers_.at(g.getLayer() + 1).getItemAtPosition(i).getState() == GridItem::State::None)
+		if (layers_.at(g->getLayer() + 1)->getItemAtPosition(i)->getState() == GridItem::State::None)
 			break;
 		if (i == 8)
-			g.setState(GridItem::State::Tie);
+			g->setState(GridItem::State::Tie);
 	}
 }
