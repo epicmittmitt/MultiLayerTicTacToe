@@ -9,8 +9,13 @@
 #include "structure.h"
 using namespace std;
 
-vector<Grid> layers_;
+vector<GridItem> layers_; // This will be populated with Grid Items
+						 // Probably created in some kind of main class where everything starts
 
+/**
+ * @param b Button that was just clicked
+ * @param s State needed to set the button to. Or whose turn it is
+ */
 void move(Button b, GridItem::State s) {
 	if (!(b.isLocked()) && b.getState() == GridItem::State::None) {
 		b.setState(s);
