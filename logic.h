@@ -38,8 +38,8 @@ void checkForWinner(GridItem* g, GridItem::State s) {
 		return;
 
 	// column win check
-	for (int i = g->position() % 3 - 1; i < 9; i += 3) {
-		if (g->getParent()->getItemAtPosition(i)->getState() == s)
+	for (int i = g->position() % 3; i < 9; i += 3) {
+		if (g->getParent()->getItemAtPosition(i)->getState() != s)
 			break;
 		if (i >= 6) {
 			g->setState(s);
@@ -49,7 +49,7 @@ void checkForWinner(GridItem* g, GridItem::State s) {
 
 	// row win check
 	for (int i = (g->position()/3) *3; i < (g->position()/3 + 1) *3; i++) {
-		if (g->getParent()->getItemAtPosition(i)->getState() == s)
+		if (g->getParent()->getItemAtPosition(i)->getState() != s)
 			break;
 		if (i >= (g->position()/3) *3 + 2) {
 			g->setState(s);
@@ -60,7 +60,7 @@ void checkForWinner(GridItem* g, GridItem::State s) {
 	// diagonal NW->SE win check
 	if (g->position() == 0 || g->position() == 4 || g->position() == 8) {
 		for (int i = 0; i < 9; i += 4) {
-			if (g->getParent()->getItemAtPosition(i)->getState() == s)
+			if (g->getParent()->getItemAtPosition(i)->getState() != s)
 				break;
 			if (i == 8) {
 				g->setState(s);
@@ -71,8 +71,8 @@ void checkForWinner(GridItem* g, GridItem::State s) {
 
 	// diagonal NE->SW win check
 	if (g->position() == 2 || g->position() == 4 || g->position() == 6) {
-		for (int i = 0; i < 9; i += 2) {
-			if (g->getParent()->getItemAtPosition(i)->getState() == s)
+		for (int i = 2; i < 9; i += 2) {
+			if (g->getParent()->getItemAtPosition(i)->getState() != s)
 				break;
 			if (i == 6) {
 				g->setState(s);

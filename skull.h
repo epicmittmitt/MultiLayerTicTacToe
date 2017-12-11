@@ -58,6 +58,7 @@ public:
 		SetBackgroundColour(*wxBLACK);
 		SetSizer(grid);
 	}
+	//SetState
 
 private:
 	wxGridSizer* grid;

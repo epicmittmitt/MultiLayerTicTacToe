@@ -85,6 +85,7 @@ void TTTButton::OnClick(wxCommandEvent& event) {
 		//wxWindow* parent = GetParent();
 		//TTTBoard* active = (TTTBoard*)parent;
 		//active->OnClick
+		int id = GetId();
 	}
 }
 
