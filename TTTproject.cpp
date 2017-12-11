@@ -82,10 +82,97 @@ void TTTButton::OnClick(wxCommandEvent& event) {
 		else {
 			SetBackgroundColour(*wxBLUE);
 		}
-		//wxWindow* parent = GetParent();
-		//TTTBoard* active = (TTTBoard*)parent;
-		//active->OnClick
-		int id = GetId();
+
+		game->victory();
+		//int id = GetId();
+		//Pass to Frame, where parsed and applied.  Remember bouncing off of locked board.
+	}
+}
+
+void TTTFrame::victory() {
+	bool win = false;
+	//Row
+	for (int index = 0; index < 9; index += 3) {
+		if (items_[index]->getState() == items_[index + 1]->getState() && items_[index]->getState() == items_[index + 2]->getState() && items_[index]->getState() != State::Tie && items_[index]->getState() != State::None) {
+			setState(items_[index]->getState());
+			win = true;
+			if (state_ == State::Red) {
+				SetBackgroundColour(*wxRED);
+				Refresh();
+				Update();
+			}
+			if (state_ == State::Blue) {
+				SetBackgroundColour(*wxBLUE);
+				Refresh();
+				Update();
+			}
+		}
+	}
+
+	//Col
+	for (int index = 0; index < 3; index += 1) {
+		if (items_[index]->getState() == items_[index + 3]->getState() && items_[index]->getState() == items_[index + 6]->getState() && items_[index]->getState() != State::Tie && items_[index]->getState() != State::None) {
+			setState(items_[index]->getState());
+			win = true;
+			if (state_ == State::Red) {
+				SetBackgroundColour(*wxRED);
+				Refresh();
+				Update();
+			}
+			if (state_ == State::Blue) {
+				SetBackgroundColour(*wxBLUE);
+				Refresh();
+				Update();
+			}
+		}
+	}
+
+	//Diag TL
+	if (items_[0]->getState() == items_[4]->getState() && items_[0]->getState() == items_[8]->getState() && items_[0]->getState() != State::Tie && items_[0]->getState() != State::None) {
+		setState(items_[0]->getState());
+		win = true;
+		if (state_ == State::Red) {
+			SetBackgroundColour(*wxRED);
+			Refresh();
+			Update();
+		}
+		if (state_ == State::Blue) {
+			SetBackgroundColour(*wxBLUE);
+			Refresh();
+			Update();
+		}
+	}
+
+	//Diag TR
+	if (items_[2]->getState() == items_[4]->getState() && items_[2]->getState() == items_[6]->getState() && items_[2]->getState() != State::Tie && items_[2]->getState() != State::None) {
+		setState(items_[2]->getState());
+		win = true;
+		if (state_ == State::Red) {
+			SetBackgroundColour(*wxRED);
+			Refresh();
+			Update();
+		}
+		if (state_ == State::Blue) {
+			SetBackgroundColour(*wxBLUE);
+			Refresh();
+			Update();
+		}
+	}
+
+	if (!win) {
+		bool tie = true;
+		for (int index = 0; index < 9; ++index) {
+			if (items_[index]->getState() == State::None) {
+				tie = false;
+				break;
+			}
+		}
+		if (tie) {
+			setState(State::Tie);
+			SetBackgroundColour(*wxCYAN);
+			Refresh();
+			Update();
+		}
 	}
 }
 

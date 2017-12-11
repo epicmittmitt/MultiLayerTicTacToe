@@ -42,8 +42,10 @@ void checkForWinner(GridItem* g, GridItem::State s) {
 		if (g->getParent()->getItemAtPosition(i)->getState() != s)
 			break;
 		if (i >= 6) {
-			g->setState(s);
-			checkForWinner(g->getParent(), s); // Checks for a winner in the layer above
+			g->getParent()->setState(s);
+			if (g->getParent()->getParent() != nullptr) {
+				checkForWinner(g->getParent(), s); // Checks for a winner in the layer above
+			}
 		}
 	}
 
@@ -52,8 +54,10 @@ void checkForWinner(GridItem* g, GridItem::State s) {
 		if (g->getParent()->getItemAtPosition(i)->getState() != s)
 			break;
 		if (i >= (g->position()/3) *3 + 2) {
-			g->setState(s);
-			checkForWinner(g->getParent(), s); // Checks for a winner in the layer above
+			g->getParent()->setState(s);
+			if (g->getParent()->getParent() != nullptr) {
+				checkForWinner(g->getParent(), s); // Checks for a winner in the layer above
+			}
 		}
 	}
 
@@ -63,8 +67,10 @@ void checkForWinner(GridItem* g, GridItem::State s) {
 			if (g->getParent()->getItemAtPosition(i)->getState() != s)
 				break;
 			if (i == 8) {
-				g->setState(s);
-				checkForWinner(g->getParent(), s); // Checks for a winner in the layer above
+				g->getParent()->setState(s);
+				if (g->getParent()->getParent() != nullptr) {
+					checkForWinner(g->getParent(), s); // Checks for a winner in the layer above
+				}
 			}
 		}
 	}
@@ -75,8 +81,10 @@ void checkForWinner(GridItem* g, GridItem::State s) {
 			if (g->getParent()->getItemAtPosition(i)->getState() != s)
 				break;
 			if (i == 6) {
-				g->setState(s);
-				checkForWinner(g->getParent(), s); // Checks for a winner in the layer above
+				g->getParent()->setState(s);
+				if (g->getParent()->getParent() != nullptr) {
+					checkForWinner(g->getParent(), s); // Checks for a winner in the layer above
+				}
 			}
 		}
 	}
@@ -86,6 +94,6 @@ void checkForWinner(GridItem* g, GridItem::State s) {
 		if (g->getParent()->getItemAtPosition(i)->getState() == GridItem::State::None)
 			break;
 		if (i == 8)
-			g->setState(GridItem::State::Tie);
+			g->getParent()->setState(GridItem::State::Tie);
 	}
 }

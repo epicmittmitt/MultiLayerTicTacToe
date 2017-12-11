@@ -13,6 +13,7 @@ public:
 	~TTTFrame();
 	Button::State getAndSetPlayer();
 	void OnClick();
+	void victory();
 	//void OnClick(wxCommandEvent& event);
 private:
 	void OnExit(wxCommandEvent& event);
@@ -34,7 +35,8 @@ enum ids{
 
 class TTTBoard : public Grid, public wxPanel {
 public:
-	TTTBoard(int pos, int board, wxWindow* frame) : Grid(pos, (TTTBoard*) frame), wxPanel(frame, ID_Panel), grid(nullptr) {
+	TTTBoard(int pos, int board, wxWindow* frame)
+		: Grid(pos, (TTTBoard*) frame), wxPanel(frame, ID_Panel), grid(nullptr), levelOne(true) {
 		grid = new wxGridSizer(3, 3, 4, 4);
 		for (int index = 0; index < 9; ++index) {
 			string code = to_string(board) + to_string(pos) + to_string(index);
@@ -48,7 +50,8 @@ public:
 		SetSizer(grid);
 	}
 
-	TTTBoard(int pos, wxWindow* frame) : Grid(pos, (TTTBoard*) frame), wxPanel(frame, ID_Panel), grid(nullptr) {
+	TTTBoard(int pos, wxWindow* frame)
+		: Grid(pos, (TTTFrame*) frame), wxPanel(frame, ID_Panel), grid(nullptr), levelOne(false) {
 		grid = new wxGridSizer(3, 3, 4, 4);
 		for (int index = 0; index < 9; ++index) {
 			TTTBoard* board = new TTTBoard(index, pos, this);
@@ -58,10 +61,40 @@ public:
 		SetBackgroundColour(*wxBLACK);
 		SetSizer(grid);
 	}
-	//SetState
+	void setState(State state) {
+		state_ = state;
+		if (state == State::Red) {
+			SetBackgroundColour(*wxRED);
+		}
+		if (state == State::Blue) {
+			SetBackgroundColour(*wxBLUE);
+		}
+		if (state == State::Tie) {
+			SetBackgroundColour(*wxCYAN);
+		}
+		Refresh();
+		Update();
+		for (size_t index = 0; index < items_.size(); ++index) {
+			GridItem* element = items_[index];
+			if (levelOne) {
+				Button* unit = (Button*)element;
+				unit->lock();
+			}
+			else {
+				Grid* unit = (Grid*)element;
+				unit->lock();
+				for (size_t ind = 0; ind < 9; ++ind) {
+					GridItem* element = unit->getItemAtPosition(ind);
+					TTTButton* button = (TTTButton*)element;
+					button->lock();
+				}
+			}
+		}
+	}
 
 private:
 	wxGridSizer* grid;
+	bool levelOne;
 };
 
 

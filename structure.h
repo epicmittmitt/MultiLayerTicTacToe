@@ -40,9 +40,9 @@ class GridItem {
     GridItem() : state_(GridItem::State::None) { position_ = -1; } // The three is the top layer grid item
     GridItem(int position) : state_(GridItem::State::None){ position_ = position; }
     int position() { return position_; }
-	  virtual ~GridItem() {};		//A non-virtual destructor will create undefined behavior
+	virtual ~GridItem() {};		//A non-virtual destructor will create undefined behavior
     State getState() { return state_; }
-    void setState(State state) { state_ = state; }
+    virtual void setState(State state) { state_ = state; }
     virtual Grid* getParent() { return nullptr; }
 
   protected:
@@ -93,11 +93,10 @@ class GridItem {
 */
 class Grid : public GridItem {
   public:
-    Grid() : GridItem(), parent(nullptr) {}
-    Grid(int position) : GridItem(position), parent(nullptr) {}
-    Grid(int position, Grid* caller) : GridItem(position), parent(caller) {}
-    Grid(int position, vector<GridItem*> items) : parent(nullptr) {
-        Grid(position);
+    Grid() : GridItem(), parent(nullptr), locked(false) {}
+    Grid(int position) : GridItem(position), parent(nullptr), locked(false) {}
+    Grid(int position, Grid* caller) : GridItem(position), parent(caller), locked(false) {}
+    Grid(int position, vector<GridItem*> items) : GridItem(position), parent(nullptr), locked(false) {
         if (items.size() == 9) {
             items_ = items;
         } else {
@@ -117,9 +116,12 @@ class Grid : public GridItem {
 		}*/
 	}
 	  Grid* parent;
+	  void lock() { locked = true; }
+	  bool isLocked(){ return locked; }
 
   protected:
     vector<GridItem*> items_;	//In C++, these must be pointers, or else data will be sliced down to GridItem
+	bool locked;	//Mostly I care if the game followed the proper rules
 };
 
 /*
